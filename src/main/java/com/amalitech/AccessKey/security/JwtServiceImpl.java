@@ -1,6 +1,6 @@
 package com.amalitech.AccessKey.security;
 
-import com.amalitech.AccessKey.NotAuthenticatedException;
+import com.amalitech.AccessKey.exception.NotAuthenticatedException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
