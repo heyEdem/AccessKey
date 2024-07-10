@@ -25,3 +25,9 @@ spring:
           auth: true
           starttls:
             enable: true
+
+  flyway:
+    baseline-on-migrate: true
+
+secret-key: ${JWT_SECRET}
+jwt-token-expiration: ${EXPIRATION}
