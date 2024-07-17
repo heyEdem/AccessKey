@@ -13,7 +13,7 @@ spring:
       hibernate:
         database-platform: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
-#    show-sql: true
+    show-sql: true
   mail:
     host: ${MAIL_HOST}
     port: ${MAIL_PORT}

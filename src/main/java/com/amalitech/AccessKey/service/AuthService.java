@@ -13,7 +13,7 @@ public interface AuthService {
 
     GenericMessageResponse resendOtp(ResendOtpRequest request);
 
-    GenericMessageResponse resetTokenRequest(ResetPasswordRequest request);
+    GenericMessageResponse passwordResetRequest(ResetPasswordRequest request);
 
     GenericMessageResponse resetPasswordWithToken(PasswordResetRequest request);
 

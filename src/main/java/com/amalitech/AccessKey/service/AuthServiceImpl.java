@@ -110,7 +110,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public GenericMessageResponse resetTokenRequest(ResetPasswordRequest request) {
+    public GenericMessageResponse passwordResetRequest(ResetPasswordRequest request) {
         Optional<User> byEmail = repository.findByEmail(request.email());
         if (byEmail.isEmpty()) throw new NotFoundException(NOT_FOUND_MSG);
 
