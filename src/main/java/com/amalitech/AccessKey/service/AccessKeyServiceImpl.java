@@ -56,12 +56,9 @@ public class AccessKeyServiceImpl implements AccessKeyService{
         if (!Objects.equals(user.getEmail(), authenticationToken.getName()))
             throw new VerificationFailedException(VERIFICATION_FAILED_MESSAGE);
 
-        List<GetAccessKeyProjection> keys = accessKeyRepository.findUserActiveKeys(user.getId());
-
-        if(!keys.isEmpty()) {
+        if(!hasActiveKey(user)) {
             throw new ActiveAccessKeyException(ACTIVE_ACCESS_KEY_EXISTS);
         }
-
         String akey = generator();
         LocalDateTime expirationTime = LocalDateTime.now().plusDays(30);
         AccessKey accessKey = AccessKey.builder()
@@ -74,7 +71,7 @@ public class AccessKeyServiceImpl implements AccessKeyService{
         accessKeyRepository.save(accessKey);
         log.info("created key with code {}",accessKey.getCode());
 
-        return new AccessKeyCreateSuccessfulResponse(CREATE_KEY, accessKey.getCode(), accessKey.getExpiry());
+        return new AccessKeyCreateSuccessfulResponse(CREATE_KEY, accessKey.getCode(), accessKey.getExpiry(),accessKey.getStatus().toString());
     }
 
     @Override
@@ -111,6 +108,10 @@ public class AccessKeyServiceImpl implements AccessKeyService{
         return accessKeyRepository.findAllAccessKeys(pageRequest);
     }
 
+    public boolean hasActiveKey(User user){
+        List<GetAccessKeyProjection> keys = accessKeyRepository.findUserActiveKeys(user.getId());
+        return keys.isEmpty();
+    }
 
     private UsernamePasswordAuthenticationToken getPrincipal(UsernamePasswordAuthenticationToken principal) {
         return principal;
