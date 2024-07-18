@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 
 import static com.amalitech.AccessKey.utils.Validator.*;
+@Builder
 public record AccessKeyRequest(
         @NotNull(message = FIELD_IS_REQUIRED)
         @NotBlank(message = FIELD_IS_REQUIRED)
