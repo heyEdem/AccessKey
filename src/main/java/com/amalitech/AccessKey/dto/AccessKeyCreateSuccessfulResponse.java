@@ -8,6 +8,7 @@ import java.time.LocalDate;
 public record AccessKeyCreateSuccessfulResponse (
         String message,
         String code,
-        LocalDate expiry
+        LocalDate expiry,
+        String status
 ){
 }
