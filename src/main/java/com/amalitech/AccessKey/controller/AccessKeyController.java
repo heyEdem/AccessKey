@@ -14,7 +14,7 @@ import java.security.Principal;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/accesskeys")
+@RequestMapping("/api/v1/access-keys")
 @RequiredArgsConstructor
 public class AccessKeyController {
     private final AccessKeyServiceImpl accessKeyService;
@@ -24,7 +24,8 @@ public class AccessKeyController {
             method = "POST"
     )
     @PostMapping("/new-key")
-    public AccessKeyCreateSuccessfulResponse addAccessKey(@RequestBody AccessKeyRequest request, Principal principal){
+    public AccessKeyCreateSuccessfulResponse addAccessKey(@RequestBody AccessKeyRequest request,
+                                                          Principal principal){
         return accessKeyService.createKey(request,principal,principal.getName());
     }
 
@@ -34,9 +35,9 @@ public class AccessKeyController {
     )
     @GetMapping("/my-keys")
     public Page<GetAccessKeyProjection> getUserAccessKeys(@RequestParam(defaultValue = "0") int page,
-                                                                       @RequestParam(defaultValue = "100") int size,
-                                                                       Principal principal) {
-        return accessKeyService.getAllUserKeys(page, size, principal.getName());
+                                                          @RequestParam(defaultValue = "100") int size,
+                                                          Principal principal) {
+        return accessKeyService.getAllUserKeys(page, size, principal);
     }
 
     @Operation(
@@ -51,11 +52,21 @@ public class AccessKeyController {
     }
 
     @Operation(
+            summary = "Admin get active access keys for a user",
+            method = "GET"
+    )
+    @GetMapping("/active-key/{email}")
+    public GetAccessKeyProjection getActiveUserKey(@PathVariable String email) {
+        return accessKeyService.getActiveUserKey(email);
+    }
+
+    @Operation(
             summary = "Delete a key",
             method = "DELETE"
     )
     @DeleteMapping("/delete-key/{id}")
-    public GenericMessageResponse deleteAccessKey(@PathVariable("id") UUID accessKeyId, Principal principal){
+    public GenericMessageResponse deleteAccessKey(@PathVariable("id") UUID accessKeyId,
+                                                  Principal principal){
         return accessKeyService.deleteKey(accessKeyId,principal);
     }
 
@@ -64,7 +75,8 @@ public class AccessKeyController {
             method = "PATCH"
     )
     @PatchMapping("/revoke-key/{id}")
-    public GenericMessageResponse revokeKey(@PathVariable("id") UUID accessKeyId, Principal principal ){
+    public GenericMessageResponse revokeKey(@PathVariable("id") UUID accessKeyId,
+                                            Principal principal ){
         return accessKeyService.revokeKey(accessKeyId,principal);
     }
 

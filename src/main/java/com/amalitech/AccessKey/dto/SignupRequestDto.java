@@ -19,8 +19,8 @@ public record SignupRequestDto(
         @NotNull(message = NAME_NOT_NULL)
         String email,
 
-        @Min(value = PASSWORD_MIN_LENGTH, message = PASSWORD_SIZE)
-        @Max(value = PASSWORD_MAX_LENGTH, message = PASSWORD_SIZE)
+//        @Min(value = PASSWORD_MIN_LENGTH, message = PASSWORD_SIZE)
+//        @Max(value = PASSWORD_MAX_LENGTH, message = PASSWORD_SIZE)
         @NotNull(message = PASSWORD_NOT_NULL)
         @NotBlank(message = PASSWORD_NOT_BLANK)
         String password

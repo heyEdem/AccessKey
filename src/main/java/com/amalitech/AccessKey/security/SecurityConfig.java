@@ -31,7 +31,9 @@ public class SecurityConfig {
                 .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/v1/signup", "/api/v1/verify-user", "/api/v1/login",
                         "/api/v1/resend-otp", "/api/v1/reset-password").permitAll()
-                .requestMatchers(HttpMethod.GET,"/api/v1/accesskeys/all-keys").hasAuthority(Roles.ADMIN.name())
+                .requestMatchers(HttpMethod.GET,"/api/v1/access-keys/all-keys","/api/v1/access-keys/active-key/**").hasAuthority(Roles.ADMIN.name())
+                .requestMatchers(HttpMethod.PATCH,"/api/v1/access-keys/revoke-key/**").hasAuthority(Roles.ADMIN.name())
+                .requestMatchers(HttpMethod.DELETE,"/api/v1/access-keys/delete-key/**").hasAuthority(Roles.ADMIN.name())
                 .anyRequest().authenticated());
 
         http.sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

@@ -9,6 +9,7 @@ public record AccessKeyCreateSuccessfulResponse (
         String message,
         String code,
         LocalDate expiry,
+        String name,
         String status
 ){
 }

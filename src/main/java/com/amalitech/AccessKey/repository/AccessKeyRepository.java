@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.parameters.P;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,5 +26,6 @@ public interface AccessKeyRepository extends JpaRepository<AccessKey,UUID> {
     @Query("select a from AccessKey a")
     Page<GetAccessKeyProjection> findAllAccessKeys(Pageable pageable);
 
-
+    @Query("SELECT a FROM AccessKey a WHERE a.school.email = :email and a.status = com.amalitech.AccessKey.entities.Status.ACTIVE ")
+    Optional <GetAccessKeyProjection> findUserActiveKeysWithEmail(@Param("email") String email);
 }

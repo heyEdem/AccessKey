@@ -3,6 +3,7 @@ package com.amalitech.AccessKey.controller;
 import com.amalitech.AccessKey.dto.*;
 import com.amalitech.AccessKey.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
 
@@ -22,7 +23,7 @@ public class AuthController {
     )
     @PostMapping("/signup")
     @ResponseStatus(HttpStatus.CREATED)
-    public GenericMessageResponse register(@RequestBody SignupRequestDto request) {
+    public GenericMessageResponse register(@Valid @RequestBody SignupRequestDto request) {
         return authService.register(request);
     }
 

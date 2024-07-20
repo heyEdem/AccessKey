@@ -37,8 +37,8 @@ public class AccessKeyServiceImpl implements AccessKeyService{
     private static final int OTP_LENGTH = 12;
     private final UserRepository userRepository;
     private final AccessKeyRepository accessKeyRepository;
-    private static final String NOT_FOUND_MSG = "User account not found";
-    private static final String ACCESS_KEY_NOT_FOUND_MSG = "No access key exists with these credentials";
+    private static final String USER_NOT_FOUND_MSG = "User account not found";
+    private static final String NO_ACTIVE_ACCESS_KEY_FOUND_MSG = "user has no active access key currently";
     private static final String VERIFICATION_FAILED_MESSAGE = "Could not verify this OTP";
     private static final String CREATE_KEY = "New access key added";
     private static final String REVOKE_SUCCESSFUL ="Access key revoked";
@@ -51,7 +51,7 @@ public class AccessKeyServiceImpl implements AccessKeyService{
     public AccessKeyCreateSuccessfulResponse createKey(AccessKeyRequest request, Principal principal, String email) {
         UsernamePasswordAuthenticationToken authenticationToken = getPrincipal((UsernamePasswordAuthenticationToken) principal);
 
-        User user = userRepository.findByEmail(email).orElseThrow(()->new NotFoundException(NOT_FOUND_MSG));
+        User user = userRepository.findByEmail(email).orElseThrow(()->new NotFoundException(USER_NOT_FOUND_MSG));
 
         if (!Objects.equals(user.getEmail(), authenticationToken.getName()))
             throw new VerificationFailedException(VERIFICATION_FAILED_MESSAGE);
@@ -71,13 +71,14 @@ public class AccessKeyServiceImpl implements AccessKeyService{
         accessKeyRepository.save(accessKey);
         log.info("created key with code {}",accessKey.getCode());
 
-        return new AccessKeyCreateSuccessfulResponse(CREATE_KEY, accessKey.getCode(), accessKey.getExpiry(),accessKey.getStatus().toString());
+        return new AccessKeyCreateSuccessfulResponse(CREATE_KEY, accessKey.getCode(), accessKey.getExpiry(),accessKey.getName(), accessKey.getStatus().toString());
     }
 
     @Override
-    public Page<GetAccessKeyProjection> getAllUserKeys(int page, int size, String email) {
+    public Page<GetAccessKeyProjection> getAllUserKeys(int page, int size, Principal principal) {
+        getPrincipal((UsernamePasswordAuthenticationToken) principal);
 
-        User user = userRepository.findByEmail(email).orElseThrow(()->new NotFoundException(NOT_FOUND_MSG));
+        User user = userRepository.findByEmail(principal.getName()).orElseThrow(()-> new NotFoundException(USER_NOT_FOUND_MSG));
 
         PageRequest pageRequest = PageRequest.of(page, size);
         return accessKeyRepository.findAllUserKeys(user.getId(), pageRequest);
@@ -95,7 +96,7 @@ public class AccessKeyServiceImpl implements AccessKeyService{
     @Override
     public GenericMessageResponse revokeKey(UUID accessKeyId, Principal principal) {
         getPrincipal((UsernamePasswordAuthenticationToken) principal);
-        AccessKey accessKey = accessKeyRepository.findById(accessKeyId).orElseThrow(()-> new NotFoundException(NOT_FOUND_MSG));
+        AccessKey accessKey = accessKeyRepository.findById(accessKeyId).orElseThrow(()-> new NotFoundException(USER_NOT_FOUND_MSG));
         accessKey.setStatus(Status.REVOKED);
         accessKeyRepository.save(accessKey);
         return new GenericMessageResponse(REVOKE_SUCCESSFUL);
@@ -104,8 +105,14 @@ public class AccessKeyServiceImpl implements AccessKeyService{
 
     @Override
     public Page<GetAccessKeyProjection> getAllKeys(int page, int size) {
+
         PageRequest pageRequest = PageRequest.of(page,size);
         return accessKeyRepository.findAllAccessKeys(pageRequest);
+    }
+
+    @Override
+    public GetAccessKeyProjection getActiveUserKey(String email) {
+        return accessKeyRepository.findUserActiveKeysWithEmail(email).orElseThrow(()-> new NotFoundException(NO_ACTIVE_ACCESS_KEY_FOUND_MSG));
     }
 
     public boolean hasActiveKey(User user){
