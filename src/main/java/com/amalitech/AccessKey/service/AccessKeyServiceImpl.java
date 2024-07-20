@@ -40,7 +40,7 @@ public class AccessKeyServiceImpl implements AccessKeyService{
     private static final String USER_NOT_FOUND_MSG = "User account not found";
     private static final String NO_ACTIVE_ACCESS_KEY_FOUND_MSG = "user has no active access key currently";
     private static final String VERIFICATION_FAILED_MESSAGE = "Could not verify this OTP";
-    private static final String CREATE_KEY = "Access Key added";
+    private static final String CREATE_KEY = "New access key added";
     private static final String REVOKE_SUCCESSFUL ="Access key revoked";
     private static final String DELETE_SUCCESSFUL = "Access key deleted successfully";
     private static final  String ACTIVE_ACCESS_KEY_EXISTS = "You already have an active access key";
