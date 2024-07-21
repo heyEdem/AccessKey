@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Sign Up</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      background: url('https://www.transparenttextures.com/patterns/wood.png');
+      background-size: cover;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      margin: 0;
+    }
+    .card {
+      background-color: rgba(255, 255, 255, 0.95);
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      color: #333;
+      width: 100%;
+      max-width: 400px;
+      padding: 20px;
+      text-align: center;
+    }
+    .card-title {
+      font-weight: bold;
+      color: #333;
+    }
+    .form-control {
+      border-radius: 5px;
+    }
+    .btn-primary {
+      background-color: #2575fc;
+      border-color: #2575fc;
+      transition: background-color 0.3s ease;
+    }
+    .btn-primary:hover {
+      background-color: #6a11cb;
+      border-color: #6a11cb;
+    }
+    .alert {
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+<div class="card">
+  <div class="card-body">
+    <h3 class="card-title">Sign Up</h3>
+    <form th:action="@{/auth/signup}" method="post">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" class="form-control" id="email" name="email" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" class="form-control" id="password" name="password" required>
+      </div>
+      <div class="form-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+      </div>
+      <div th:if="${error}" class="alert alert-danger">
+        <span th:text="${error}"></span>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
+      <a th:href="@{/auth/login}" class="btn btn-link">Already have an account? Login</a>
+    </form>
+  </div>
+</div>
+</body>
+</html>

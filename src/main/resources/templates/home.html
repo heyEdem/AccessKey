@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>User Access Keys</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      background: url('https://www.transparenttextures.com/patterns/wood.png');
+      background-size: cover;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      margin: 0;
+    }
+    .container {
+      background-color: rgba(255, 255, 255, 0.95);
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      color: #333;
+      padding: 20px;
+      width: 90%;
+      max-width: 800px;
+    }
+    .table {
+      margin-top: 20px;
+    }
+    .btn-create {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h2 class="text-center">Your Access Keys</h2>
+  <a th:href="@{/create}" class="btn btn-primary btn-create">Create New Key</a>
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Date of Creation</th>
+      <th>Code</th>
+      <th>Status</th>
+      <th>Expiry Date</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="key : ${accessKeys}">
+      <td th:text="${key.name}">Name</td>
+      <td th:text="${key.creationDate}">Date of Creation</td>
+      <td th:text="${key.code}">Code</td>
+      <td th:text="${key.status}">Status</td>
+      <td th:text="${key.expiryDate}">Expiry Date</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>
